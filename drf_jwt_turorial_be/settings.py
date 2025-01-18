@@ -50,6 +50,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "drf_jwt_turorial_be.middleware.refresh_jwt.RefreshJWTMiddleware",
 ]
 
 ROOT_URLCONF = "drf_jwt_turorial_be.urls"
