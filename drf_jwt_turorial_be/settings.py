@@ -145,3 +145,7 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
+
+CORS_EXPOSE_HEADERS = [
+    "X-Access-Token",
+]
