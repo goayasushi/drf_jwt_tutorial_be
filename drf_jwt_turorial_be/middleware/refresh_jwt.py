@@ -7,5 +7,5 @@ class RefreshJWTMiddleware(MiddlewareMixin):
         if request.user.is_authenticated:
             # create new jwt token
             token = AccessToken.for_user(request.user)
-            response["Authorization"] = f"Bearer {str(token)}"
+            response["X-Access-Token"] = f"{str(token)}"
         return response
