@@ -9,3 +9,11 @@
 
   - カスタマイズ
     https://django-rest-framework-simplejwt.readthedocs.io/en/latest/settings.html
+
+### cors
+
+- ライブラリ
+  https://pypi.org/project/django-cors-headers/
+
+  - カスタムヘッダーの cors 設定
+    CORS_EXPOSE_HEADERS
