@@ -17,3 +17,21 @@
 
   - カスタムヘッダーの cors 設定
     CORS_EXPOSE_HEADERS
+    https://pypi.org/project/django-cors-headers/
+
+### db
+
+- postgresql
+  https://pgsql-jp.github.io/current/html/
+  https://docs.djangoproject.com/ja/5.1/ref/databases/#postgresql-notes
+
+- ライブラリ
+  psycopg2-binary
+  https://www.psycopg.org/docs/install.html#quick-install
+  https://zenn.dev/aew2sbee/articles/django-rest-framework-postgres
+
+### env
+
+- ライブラリ
+  python-dotenv
+  https://pypi.org/project/python-dotenv/
