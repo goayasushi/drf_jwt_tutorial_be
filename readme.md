@@ -35,3 +35,35 @@
 - ライブラリ
   python-dotenv
   https://pypi.org/project/python-dotenv/
+
+### django
+
+#### マイグレーション
+
+- マイグレーションファイルの作成
+
+  - プロジェクト内のすべてのアプリケーションのモデル変更を検出して、マイグレーションファイルを生成
+
+  ```
+  python manage.py makemigrations
+  ```
+
+  - 特定のアプリケーションのモデル変更を検出して、マイグレーションファイルを生成
+
+  ```
+  python manage.py makemigrations 【app_name】
+  ```
+
+- マイグレーションの適用
+
+  - プロジェクト内のすべてのアプリケーションのマイグレーションを適用
+
+  ```
+  python manage.py migrate
+  ```
+
+  - 特定のアプリケーションのマイグレーションを適用
+
+  ```
+  python manage.py migrate 【app_name】
+  ```
