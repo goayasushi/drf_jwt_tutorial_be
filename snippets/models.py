@@ -7,6 +7,9 @@ class Snippet(models.Model):
     code = models.TextField()  # コードスニペット本体
     linenos = models.BooleanField(default=False)  # 行番号を表示するかどうか
     language = models.CharField(default="python", max_length=100)  # プログラミング言語
+    owner = models.ForeignKey(
+        "auth.User", related_name="snippets", on_delete=models.CASCADE
+    )
 
     class Meta:
         ordering = ["created"]  # 作成日時で並び替え
