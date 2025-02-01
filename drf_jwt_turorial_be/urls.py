@@ -30,5 +30,4 @@ urlpatterns = [
     path("account/", include("accounts.urls")),
     path("api/", include(router.urls)),
     path("snippets/", include("snippets.urls")),
-    path("", views.api_root, name="api-root"),
 ]
