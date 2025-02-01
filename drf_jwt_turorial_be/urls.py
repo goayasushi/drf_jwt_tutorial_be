@@ -20,7 +20,6 @@ from django.urls import path, include
 from rest_framework import routers
 
 from accounts import views as account_views
-from drf_jwt_turorial_be import views
 
 router = routers.DefaultRouter()
 router.register(r"users", account_views.UserViewSet)
