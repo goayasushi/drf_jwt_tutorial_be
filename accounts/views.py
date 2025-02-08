@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from rest_framework import permissions, viewsets, status, views
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
+from rest_framework.generics import CreateAPIView
+from .serializers import UserRegistrationSerializer
 
 
 from .serializers import UserSerializer
@@ -32,3 +34,8 @@ class CurrentUserView(views.APIView):
                 {"message": "user not authenticated"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+
+class UserRegistrationView(CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserRegistrationSerializer
