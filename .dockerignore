@@ -1,0 +1,7 @@
+.env
+Dockerfile
+db.sqlite3
+.gitignore
+readme.md
+venv/
+**/__pycache__/
