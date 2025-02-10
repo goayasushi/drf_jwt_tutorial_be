@@ -67,3 +67,53 @@
   ```
   python manage.py migrate 【app_name】
   ```
+
+### docker
+
+#### psql 接続
+
+コンテナの Exec で以下のコマンドを実行
+https://zenn.dev/azuki9140/articles/7a9426295814ce
+
+```
+psql -h db -U myappuser -d drf_jwt_turorial
+psql -h 【ホスト名】 -U 【ユーザー名】 -d 【db名】
+```
+
+### ローカル起動
+
+- 環境変数の設定
+
+  .env ファイルを作成し、任意の設定値を記述
+
+  ```
+  DATABASE_NAME=データベース名
+  DATABASE_USER=ユーザー名
+  DATABASE_PASSWORD=ユーザーで接続する際のパスワード
+  DATABASE_HOST=ホスト名
+  DATABASE_PORT=ポート番号
+  ```
+
+- 起動
+
+```
+docker compose up --build -d
+```
+
+- リクエスト
+
+  任意のクライアントツールからリクエストを実行
+
+  - postman でユーザー登録リクエスト例
+    - メソッド: `POST`
+    - URL: `http://localhost:8000/account/register/`
+    - リクエストボディ
+      ```
+      {
+          "username": "test-user",
+          "password": "test",
+          "first_name": "テスト",
+          "last_name": "登録",
+          "email": "register@test.com"
+      }
+      ```
