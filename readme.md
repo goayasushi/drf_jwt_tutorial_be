@@ -117,3 +117,51 @@ docker compose up --build -d
           "email": "register@test.com"
       }
       ```
+
+### その他
+
+#### ecs エラー
+
+- ec2 を private サブネットに配置した場合に、ec2 インスタンスの登録がされない
+
+  インターネット接続が必要と思われる
+
+  https://dev.classmethod.jp/articles/privatesubnet_ecs/
+
+  `/var/log/ecs/ecs-agent.log`
+
+  ```
+  evel=info time=2025-02-11T01:21:31Z msg="Loading state!" module=state_manager.go
+  level=info time=2025-02-11T01:21:31Z msg="Event stream ContainerChange start listening..." module=eventstream.go
+  level=info time=2025-02-11T01:21:31Z msg="eni watcher has been initialized" module=watcher_linux.go
+  level=info time=2025-02-11T01:21:31Z msg="Successfully got ECS instance credentials from provider: EC2RoleProvider"
+  level=info time=2025-02-11T01:21:31Z msg="Successfully loaded Appnet agent container tarball: /managed-agents/serviceconnect/ecs-service-connect-agent.interface-v1.tar" image="ecs-service-connect-agent:interface-v1"
+  level=info time=2025-02-11T01:21:31Z msg="Registering Instance with ECS"
+  level=info time=2025-02-11T01:21:31Z msg="Remaining memory" remainingMemory=952
+  level=error time=2025-02-11T01:22:01Z msg="health check [HEAD http://localhost:51678/v1/metadata] failed with error: Head \"http://localhost:51678/v1/metadata\": dial tcp 127.0.0.1:51678: connect: connection refused" module=healthcheck.go
+  level=error time=2025-02-11T01:22:31Z msg="health check [HEAD http://localhost:51678/v1/metadata] failed with error: Head \"http://localhost:51678/v1/metadata\": dial tcp 127.0.0.1:51678: connect: connection refused" module=healthcheck.go
+  level=error time=2025-02-11T01:23:01Z msg="health check [HEAD http://localhost:51678/v1/metadata] failed with error: Head \"http://localhost:51678/v1/metadata\": dial tcp 127.0.0.1:51678: connect: connection refused" module=healthcheck.go
+  level=error time=2025-02-11T01:23:31Z msg="health check [HEAD http://localhost:51678/v1/metadata] failed with error: Head \"http://localhost:51678/v1/metadata\": dial tcp 127.0.0.1:51678: connect: connection refused" module=healthcheck.go
+  level=error time=2025-02-11T01:23:32Z msg="Unable to register as a container instance with ECS" error="RequestError: send request failed\ncaused by: Post \"https://ecs.ap-northeast-1.amazonaws.com/\": dial tcp 52.195.202.50:443: i/o timeout"
+  level=error time=2025-02-11T01:23:32Z msg="Error registering container instance" error="RequestError: send request failed\ncaused by: Post \"https://ecs.ap-northeast-1.amazonaws.com/\": dial tcp 52.195.202.50:443: i/o timeout"
+  ```
+
+  ->natgateway / vpc エンドポイントの設置でインターネット接続設定したいところだが、料金がかかるので ec2 を public サブネットに配置することにする
+
+  _セキュリティを考慮して sg の設定は最小限にする_
+
+- awsvpc モードでコンテナに接続できない
+
+  https://zenn.dev/neko_student/articles/258cbed688e469
+  https://qiita.com/k2-hara/items/bb2ebb3bc5efc3000729#4-2-%E3%82%B3%E3%83%B3%E3%83%86%E3%83%8A%E3%81%AB%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%84%E5%95%8F%E9%A1%8C
+
+  ->今回は、bridge モードで対応する。
+
+- 400bad request になる
+
+  ALLOWED_HOSTS に追加が必要
+  https://office54.net/python/django/settings-allowed-hosts
+
+  ```
+  ALLOWED_HOSTS = ["リクエスト時のホスト"]
+  ```
