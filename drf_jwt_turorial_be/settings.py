@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 import os
-
+import requests
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,6 +29,15 @@ SECRET_KEY = "django-insecure-b9wodrn(+chgycop*p2fh@to^g$%i92#*!3#50%1j0u2f^1ssr
 DEBUG = True
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1").split(",")
+
+# albヘルスチェック時にEC2 のプライベート IPから送信されるため、動的に取得し ALLOWED_HOSTS に追加
+try:
+    EC2_PRIVATE_IP = requests.get(
+        "http://169.254.169.254/latest/meta-data/local-ipv4", timeout=1
+    ).text
+    ALLOWED_HOSTS.append(EC2_PRIVATE_IP)
+except requests.exceptions.RequestException:
+    pass
 
 # Application definition
 
