@@ -20,6 +20,7 @@ from django.urls import path, include
 from rest_framework import routers
 
 from accounts import views as account_views
+from snippets.views import health_check
 
 router = routers.DefaultRouter()
 router.register(r"users", account_views.UserViewSet)
@@ -29,4 +30,5 @@ urlpatterns = [
     path("account/", include("accounts.urls")),
     path("api/", include(router.urls)),
     path("snippets/", include("snippets.urls")),
+    path("health/", health_check, name="health-check"),
 ]
