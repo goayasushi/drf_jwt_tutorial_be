@@ -15,7 +15,7 @@ phases:
         | docker login --username 'AWS' --password-stdin "${ecr_host}"
       - |
         docker image build \
-          --tag "${ecr_repo}:${build_id}"
+          --tag "${ecr_repo}:${build_id}" \
           .
       - docker image tag "${ecr_repo}:${build_id}" "${ecr_repo}:latest"
       - |
