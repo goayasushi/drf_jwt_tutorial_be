@@ -55,6 +55,8 @@ https://drf-jwt-tutorial-fe.vercel.app/snippets
   - ECR
   - RDS (PostgreSQL)
   - Eventbridge
+  - codepipeline
+  - codebuild
 
 ## aws システム構成図
 
