@@ -1,86 +1,68 @@
-### jwt
+## アプリケーション概要
 
-- 今回の実装
-  有効期限を 30m に設定。
-  jwt token が期限内であれば、リクエストの度に jwt token の新規発行。
+このアプリケーションは、Django REST Framework (DRF) のチュートリアル に沿って構築された スニペット管理機能 を実装したものです。
 
-- ライブラリ
-  https://django-rest-framework-simplejwt.readthedocs.io/en/latest/getting_started.html
+フロントエンド (FE) は Next.js で実装しています。
 
-  - カスタマイズ
-    https://django-rest-framework-simplejwt.readthedocs.io/en/latest/settings.html
+認証方法は、JWT 認証を実装しています。
 
-### cors
+## url
 
-- ライブラリ
-  https://pypi.org/project/django-cors-headers/
+https://drf-jwt-tutorial-fe.vercel.app/snippets
 
-  - カスタムヘッダーの cors 設定
-    CORS_EXPOSE_HEADERS
-    https://pypi.org/project/django-cors-headers/
+※ aws コストを考慮して、バックエンドは 8-20 時の間のみ稼働
 
-### db
+## 作成背景
 
-- postgresql
-  https://pgsql-jp.github.io/current/html/
-  https://docs.djangoproject.com/ja/5.1/ref/databases/#postgresql-notes
+課題に感じているバックエンドのフレームワーク (Django REST Framework) への理解を深めることを目的に、DRF の公式チュートリアル に沿って構築しました。
 
-- ライブラリ
-  psycopg2-binary
-  https://www.psycopg.org/docs/install.html#quick-install
-  https://zenn.dev/aew2sbee/articles/django-rest-framework-postgres
+- バックエンドの理解を強化するため に、REST API の基本から学習。
+- フロントエンド (Next.js) を組み合わせ、実務に近い構成を意識。
+- インフラ環境は AWS を採用 し、実際の開発に近い運用を意識。
 
-### env
+## 技術スタック・開発環境
 
-- ライブラリ
-  python-dotenv
-  https://pypi.org/project/python-dotenv/
+### [フロントエンド](https://github.com/goayasushi/drf_jwt_tutorial_fe)
 
-### django
+- Next.js
+- Chakra UI
+- react icons
+- react-syntax-highlighter
+- React Hook Form
+- axios
+- TanStack Query
+- jwt-decode
 
-#### マイグレーション
+### [バックエンド](https://github.com/goayasushi/drf_jwt_tutorial_be)
 
-- マイグレーションファイルの作成
+- Django
+- Django REST Framework
+- djangorestframework-simplejwt
+- django-cors-headers
+- psycopg2-binary
+- PostgreSQL
+- Gunicorn
 
-  - プロジェクト内のすべてのアプリケーションのモデル変更を検出して、マイグレーションファイルを生成
+### インフラ
 
-  ```
-  python manage.py makemigrations
-  ```
+- フロントエンド: vercel
 
-  - 特定のアプリケーションのモデル変更を検出して、マイグレーションファイルを生成
+- バックエンド: AWS
+  - Route53
+  - ACM
+  - ALB
+  - ECS on EC2
+  - ECR
+  - RDS (PostgreSQL)
+  - Eventbridge
 
-  ```
-  python manage.py makemigrations 【app_name】
-  ```
+## aws システム構成図
 
-- マイグレーションの適用
+![aws システム構成図](config_diagram/configuration.png)
 
-  - プロジェクト内のすべてのアプリケーションのマイグレーションを適用
+## ローカル起動
 
-  ```
-  python manage.py migrate
-  ```
-
-  - 特定のアプリケーションのマイグレーションを適用
-
-  ```
-  python manage.py migrate 【app_name】
-  ```
-
-### docker
-
-#### psql 接続
-
-コンテナの Exec で以下のコマンドを実行
-https://zenn.dev/azuki9140/articles/7a9426295814ce
-
-```
-psql -h db -U myappuser -d drf_jwt_turorial
-psql -h 【ホスト名】 -U 【ユーザー名】 -d 【db名】
-```
-
-### ローカル起動
+docker 起動を前提として記載
 
 - 環境変数の設定
 
@@ -92,6 +74,8 @@ psql -h 【ホスト名】 -U 【ユーザー名】 -d 【db名】
   DATABASE_PASSWORD=ユーザーで接続する際のパスワード
   DATABASE_HOST=ホスト名
   DATABASE_PORT=ポート番号
+  ALLOWED_HOSTS=許可するホスト名
+  CORS_ALLOWED_ORIGINS=CORS を許可するオリジン
   ```
 
 - 起動
@@ -104,7 +88,7 @@ docker compose up --build -d
 
   任意のクライアントツールからリクエストを実行
 
-  - postman でユーザー登録リクエスト例
+  - postman でユーザー登録リクエストを行う例
     - メソッド: `POST`
     - URL: `http://localhost:8000/account/register/`
     - リクエストボディ
@@ -118,9 +102,11 @@ docker compose up --build -d
       }
       ```
 
-### その他
+## 備忘録
 
-#### ecs エラー
+インフラ構築・公開にあたり、詰まった箇所を備忘録として記載
+
+### ecs 関連のエラー
 
 - ec2 を private サブネットに配置した場合に、ec2 インスタンスの登録がされない
 
@@ -157,11 +143,50 @@ docker compose up --build -d
 
   ->今回は、bridge モードで対応する。
 
+### drf エラー
+
 - 400bad request になる
 
   ALLOWED_HOSTS に追加が必要
+
+  開発時は、settings. py の DEBUG が True かつ ALLOWED＿HOSTS が空だったため、localhost、127.0.0.1、[::1]]が自動的に有効になっていたため、400 にならなかったと思われる。
+
   https://office54.net/python/django/settings-allowed-hosts
 
   ```
   ALLOWED_HOSTS = ["リクエスト時のホスト"]
   ```
+
+### alb 関連のエラー
+
+- alb ヘルスチェックで ALLOWED_HOSTS のエラーが発生
+
+  https://www.utakata.work/entry/2021/03/24/114349
+
+  https://progl.hatenablog.com/entry/2018/02/12/022426
+
+  -> ec2 ip を動的に取得し、ALLOWED_HOSTS に追加
+
+  https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/instancedata-data-retrieval.html
+
+### codepipeline 関連のエラー
+
+- codebuild authorization エラー
+
+  ```
+  authorization failed for primary source and source version xxxxxxx
+  ```
+
+  UseConnection のアクセス許可が必要
+
+  https://rinoguchi.net/2021/08/aws-fullstack-sample-application-part3.html
+
+- codebuild Too Many Requests エラー
+
+  Image のダウンロード回数制限が原因と思われる
+
+  -> AWS ECR Public からイメージを取得する
+
+  https://dev.classmethod.jp/articles/codebuild-has-to-use-dockerhub-login-to-avoid-ip-gacha/
+
+  https://zenn.dev/saba_can00/articles/aws-codebuild-too-many-request
