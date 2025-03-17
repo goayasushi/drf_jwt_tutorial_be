@@ -58,6 +58,16 @@ https://drf-jwt-tutorial-fe.vercel.app/snippets
   - codepipeline
   - codebuild
 
+## CI/CD
+
+### GitHub Actions による自動テスト
+
+master ブランチへのプルリクエスト作成時に、テストのワークフローがトリガーされます。
+
+### CodePipeline / CodeBuild による自動デプロイ
+
+master ブランチへの push をトリガーに、CodeBuild で Docker イメージのビルド・ECR へのプッシュ、ECS on EC2 へのデプロイを実行します。
+
 ## aws システム構成図
 
 ![aws システム構成図](config_diagram/configuration.png)
