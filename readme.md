@@ -10,15 +10,12 @@
 
 https://drf-jwt-tutorial-fe.vercel.app/snippets
 
-※ aws コストを考慮して、バックエンドは 8-20 時の間のみ稼働
-
 ## 作成背景
 
 課題に感じているバックエンドのフレームワーク (Django REST Framework) への理解を深めることを目的に、DRF の公式チュートリアル に沿って構築しました。
 
 - バックエンドの理解を強化するため に、REST API の基本から学習。
 - フロントエンド (Next.js) を組み合わせ、実務に近い構成を意識。
-- インフラ環境は AWS を採用 し、実際の開発に近い運用を意識。
 
 ## 技術スタック・開発環境
 
@@ -47,30 +44,13 @@ https://drf-jwt-tutorial-fe.vercel.app/snippets
 
 - フロントエンド: vercel
 
-- バックエンド: AWS
-  - Route53
-  - ACM
-  - ALB
-  - ECS on EC2
-  - ECR
-  - RDS (PostgreSQL)
-  - Eventbridge
-  - codepipeline
-  - codebuild
+- バックエンド: render
 
 ## CI/CD
 
 ### GitHub Actions による自動テスト
 
 master ブランチへのプルリクエスト作成時に、テストのワークフローがトリガーされます。
-
-### CodePipeline / CodeBuild による自動デプロイ
-
-master ブランチへの push をトリガーに、CodeBuild で Docker イメージのビルド・ECR へのプッシュ、ECS on EC2 へのデプロイを実行します。
-
-## aws システム構成図
-
-![aws システム構成図](config_diagram/configuration.png)
 
 ## ローカル起動
 
@@ -81,6 +61,7 @@ docker 起動を前提として記載
   .env ファイルを作成し、任意の設定値を記述
 
   ```
+  DATABASE_TYPE=postgresql
   DATABASE_NAME=データベース名
   DATABASE_USER=ユーザー名
   DATABASE_PASSWORD=ユーザーで接続する際のパスワード
@@ -116,7 +97,8 @@ docker compose up --build -d
 
 ## 備忘録
 
-インフラ構築・公開にあたり、詰まった箇所を備忘録として記載
+インフラ構築・公開にあたり、詰まった箇所を備忘録として記載  
+※aws 環境から render に be を移行
 
 ### ecs 関連のエラー
 
