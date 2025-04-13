@@ -14,10 +14,6 @@ services:
         generateValue: true
       - key: WEB_CONCURRENCY
         value: 4
-      - key: ALLOWED_HOSTS
-        value: drf-jwt-tutorial-api.onrender.com,localhost,127.0.0.1
-      - key: CORS_ALLOWED_ORIGINS
-        value: https://drf-jwt-tutorial-fe.vercel.app,http://localhost:3000
       - key: DEBUG
         value: false
 
