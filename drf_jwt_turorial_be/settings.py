@@ -13,7 +13,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 import os
-import requests
+import dj_database_url
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,18 +27,24 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "True").lower() == "true"
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1").split(",")
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+
+# Render固有の設定
+RENDER_EXTERNAL_HOSTNAME = os.getenv("RENDER_EXTERNAL_HOSTNAME")
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # albヘルスチェック時にEC2 のプライベート IPから送信されるため、動的に取得し ALLOWED_HOSTS に追加
-try:
-    EC2_PRIVATE_IP = requests.get(
-        "http://169.254.169.254/latest/meta-data/local-ipv4", timeout=1
-    ).text
-    ALLOWED_HOSTS.append(EC2_PRIVATE_IP)
-except requests.exceptions.RequestException:
-    pass
+# import requests
+# try:
+#     EC2_PRIVATE_IP = requests.get(
+#         "http://169.254.169.254/latest/meta-data/local-ipv4", timeout=1
+#     ).text
+#     ALLOWED_HOSTS.append(EC2_PRIVATE_IP)
+# except requests.exceptions.RequestException:
+#     pass
 
 # Application definition
 
@@ -100,6 +107,14 @@ DATABASES = {
         "PORT": os.getenv("DATABASE_PORT", "5432"),
     }
 }
+
+# Render PostgreSQL Database (DATABASE_URL環境変数が設定されている場合はそちらを使用)
+DATABASE_URL = os.getenv("DATABASE_URL")
+if DATABASE_URL:
+    DATABASES["default"] = dj_database_url.config(
+        default=DATABASE_URL,
+        conn_max_age=600,
+    )
 
 
 # Password validation
