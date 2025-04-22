@@ -10,6 +10,11 @@
 
 https://drf-jwt-tutorial-fe.vercel.app/snippets
 
+### テスト用アカウント
+
+ユーザー名：test-user  
+パスワード：mQ7@947mbOH#
+
 ## 作成背景
 
 課題に感じているバックエンドのフレームワーク (Django REST Framework) への理解を深めることを目的に、DRF の公式チュートリアル に沿って構築しました。
